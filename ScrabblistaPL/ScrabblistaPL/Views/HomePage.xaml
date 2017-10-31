@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="Transparent"
+             x:Class="ScrabblistaPL.Views.HomePage">
+    <ContentPage.Resources>
+
+        <ResourceDictionary>
+            <OnPlatform x:Key="fontType"
+                  x:TypeArguments="x:String"
+                  Android="casual"
+                  WinPhone="MV Boli" />
+
+            <OnPlatform x:Key="barSize"
+                  x:TypeArguments="x:Double"
+                  Android="1"
+                  WinPhone="3" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="Transparent">
+            <StackLayout>
+                <Label HorizontalOptions="Center" Text="Wyszukiwarka słów" TextColor="White" FontSize="36" FontFamily="{StaticResource fontType}" />
+                <Entry HorizontalOptions="FillAndExpand" Placeholder="MOJE LITERY" BackgroundColor="#66CD00" Opacity="0.7" PlaceholderColor="#E9E9E9" x:Name="LettersEntryBox" TextColor="White" Text="{Binding InputLetters}" />
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Button HorizontalOptions="Center" Text="SZUKAJ" TextColor="White" BackgroundColor="#66CD00" Opacity="0.7" Command="{Binding SearchCommand}" x:Name="SearchButton" />
+                    <Button HorizontalOptions="Center" Text="Pomoc" TextColor="White" BackgroundColor="#66CD00" Opacity="0.7" x:Name="HelpButton" />
+                </StackLayout>
+                <Label HorizontalOptions="Center" Text="Ilość znalezionych słów:" TextColor="White" FontSize="18" FontFamily="{StaticResource fontType}" IsVisible="{Binding IsCounterVisible}" />
+                <Label HorizontalOptions="Center" Text="{Binding WordsAmount}" TextColor="White" FontSize="18" FontFamily="{StaticResource fontType}" IsVisible="{Binding IsCounterVisible}" />
+            </StackLayout>
+            <StackLayout HorizontalOptions="Center">
+                <ListView HasUnevenRows="False" x:Name="WordsSet"
+                    ItemsSource="{Binding WordsFound}" HorizontalOptions="Center">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ViewCell.View>
+                                    <StackLayout>
+                                        <Label HorizontalOptions="Center" VerticalOptions="Start" Text="{Binding Presentation}" TextColor="White" />
+                                    </StackLayout>
+                                </ViewCell.View>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+            <ActivityIndicator VerticalOptions="EndAndExpand" Scale="{StaticResource barSize}" HeightRequest="100"  WidthRequest="100" HorizontalOptions="Center" IsVisible="{Binding IsBusy}" IsRunning="{Binding IsBusy}" Color="#66CD00" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
