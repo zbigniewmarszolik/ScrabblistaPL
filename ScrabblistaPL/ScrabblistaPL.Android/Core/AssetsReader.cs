@@ -1,12 +1,12 @@
 ﻿using Android.Content.Res;
 using ScrabblistaPL.Android.Helpers;
 using ScrabblistaPL.Domain.Core;
-using ScrabblistaPL.Droid.Core;
+using ScrabblistaPL.Android.Core;
 using System.Collections.Generic;
 using System.IO;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AssetsReader))]
-namespace ScrabblistaPL.Droid.Core
+namespace ScrabblistaPL.Android.Core
 {
     public class AssetsReader : IAssetsReader
     {
