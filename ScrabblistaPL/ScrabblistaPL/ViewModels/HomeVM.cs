@@ -6,6 +6,7 @@ using ScrabblistaPL.Domain.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -17,15 +18,14 @@ namespace ScrabblistaPL.ViewModels
         public Action WrongInputAction { get; set; }
         public Action TooLongInputAction { get; set; }
         public BulkCollection<Word> WordsFound { get; set; }
+        public string HelpAdvice { get; set; }
 
-        private IList<Word> _allWords { get; set; }
         private IAssetsReader _assetsReader { get; set; }
         private IWordsFinder _wordsFinder { get; set; }
         private ILettersConverter _lettersConverter { get; set; }
-
-        private char[] _letters { get; set; }
-
-        public string HelpAdvice { get; set; }
+        private IList<Word> _allWords { get; set; }
+        private string _regularExpressionPattern { get; set; }
+        private string _replacementPattern { get; set; }
 
         private string _inputLetters;
 
@@ -100,10 +100,11 @@ namespace ScrabblistaPL.ViewModels
 
             HelpAdvice = "Prosze wpisać litery i wcisnąć SZUKAJ. W celu wpisania dzikiej karty, prosze wpisać znak zapytania. " +
                 "Maksymalna ilość dzikich kart to 2. " +
-                "Maksymalna ilość wprowadzanych znaków to 16 włącznie z dzikimi kartami.";
+                "Maksymalna ilość wprowadzanych znaków to 16 włącznie z dzikimi kartami." +
+                "Nieprawidłowe znaki zostaną zignorowane.";
 
-            _letters = new char[] { '?', 'a', 'ą', 'b', 'c', 'ć', 'd', 'e', 'ę', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'ł', 'm', 'n', 'ń',
-                'o', 'ó', 'p', 'q', 'r', 's', 'ś', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'ź', 'ż' };
+            _regularExpressionPattern = "[a-ząćęłńóśźż?]";
+            _replacementPattern = "[^a-ząćęłńóśźż?]";
         }
 
         private void Search()
@@ -122,14 +123,19 @@ namespace ScrabblistaPL.ViewModels
 
             InputLetters = _lettersConverter.ConvertUpperToLowerCase(InputLetters);
 
-            foreach (var item in InputLetters)
+            var regex = new Regex(_regularExpressionPattern);
+
+            var match = regex.IsMatch(InputLetters);
+
+            if (!match)
             {
-                if (!_letters.Contains(item))
-                {
-                    WrongInputAction();
-                    return;
-                }
+                WrongInputAction();
+                return;
             }
+
+            regex = new Regex(_replacementPattern);
+
+            InputLetters = regex.Replace(InputLetters, "");
 
             IsBusy = true;
 

@@ -38,7 +38,7 @@ namespace ScrabblistaPL.Views
 
         private void ShowInputError()
         {
-            DisplayAlert("", "Wprowadzono nieprawidłowe znaki. Proszę użyć liter polskiego alfabetu lub znaku zapytania w celu wpisania dzikiej karty.", "OK");
+            DisplayAlert("", "Wprowadzono tylko nieprawidłowe znaki. Proszę użyć liter polskiego alfabetu lub znaku zapytania w celu wpisania dzikiej karty.", "OK");
         }
 
         private void HelpButton_Clicked(object sender, System.EventArgs e)
